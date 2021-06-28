@@ -4,13 +4,15 @@ const colors = document.getElementsByClassName("jsColor");
 const range = document.getElementById("jsRange");
 const mode = document.getElementById("jsMode");
 
-console.log(Array.from(colors)); // Object 에서 부터 배열을 만듦 
+const INITIAL_COLOR = "#2c2c2c"; // 초기 색상 블랙 
+const CANVAS_SIZE = 700;
 
-canvas.width = 700;
-canvas.height = 700;
+canvas.width = CANVAS_SIZE;
+canvas.height = CANVAS_SIZE;
 
-ctx.strokeStyle = "#2c2c2c"; // Context 안에 있는 색상을 구별 
-ctx.lineWidth = 2.5; // Context 안에 존재하는 선들의 굷기를 의미 
+ctx.strokeStyle = "INITIAL_COLOR"; // Context 안에 있는 색상을 구별
+ctx.fillStyle = "INITIAL_COLOR"; // fill 채우기 색상 
+ctx.lineWidth = 2.5; // Context 안에 존재하는 선들의 굷기를 의미
 
 let painting = false;
 let filling = false; 
@@ -44,6 +46,7 @@ function onMouseUp(event) {
 function handleColorClick(event) {
     const color = event.target.style.backgroundColor;
     ctx.strokeStyle = color;
+    ctx.fillStyle = color;
 }
 
 function handleRangeChange(event) {
@@ -59,6 +62,13 @@ function handleModeClick() {
     } else {
         filling = true;
         mode.innerText = "Paint"; // button --> Paint로 대체 
+        ctx.fillStyle = ctx.strokeStyle; 
+    }
+}
+
+function handleCanvasClick() {
+    if (filling) {
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 }
 
@@ -68,6 +78,8 @@ if (canvas) {
     canvas.addEventListener("mousedown", startPainting);
     canvas.addEventListener("mouseup", stopPainting);
     canvas.addEventListener("mouseleave", stopPainting);
+    canvas.addEventListener("click", handleCanvasClick);
+
 }
 
 
